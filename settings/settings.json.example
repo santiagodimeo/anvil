@@ -1,0 +1,30 @@
+{
+  "env": {
+    "SLACK_BOT_TOKEN": "YOUR_SLACK_BOT_TOKEN",
+    "SLACK_TEAM_ID": "YOUR_SLACK_TEAM_ID"
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/validate-commit-style.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "vercel@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true,
+    "supabase@claude-plugins-official": true
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark"
+}

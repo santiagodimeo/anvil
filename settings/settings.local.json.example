@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nvim:*)",
+      "WebSearch",
+      "Bash(which brew:*)",
+      "mcp__slack__slack_get_channel_history",
+      "Bash(gh api *)",
+      "mcp__slack__slack_list_channels"
+    ]
+  }
+}

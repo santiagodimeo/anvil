@@ -1,0 +1,17 @@
+# Claude Code settings with real credentials — never commit these
+settings.json
+settings.local.json
+*.local.json
+
+# OS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+*.swp
+
+# Environment
+.env
+.env.*
+!.env.example
