@@ -1,4 +1,4 @@
-# swe-ai-stack
+# anvil
 
 A personal SWE AI framework — Claude Code commands, hooks, and tooling that define how I write, review, and ship software.
 
