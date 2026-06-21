@@ -23,7 +23,16 @@
   "enabledPlugins": {
     "vercel@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "supabase@claude-plugins-official": true
+    "supabase@claude-plugins-official": true,
+    "warp@claude-code-warp": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-code-warp": {
+      "source": {
+        "source": "github",
+        "repo": "warpdotdev/claude-code-warp"
+      }
+    }
   },
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark"
