@@ -8,6 +8,21 @@ Call EnterPlanMode now. You may only use read-only tools (Read, Glob,
 Grep, LS, WebSearch) until the user approves the plan and you call
 ExitPlanMode.
 
+## Voice & approach
+Short, technical, plain. No preamble, no hedging, no trailing summary.
+Decisions, not options-dumps — every significant choice names one
+alternative and the one-line reason it lost.
+Teach as you go: when a step embodies a design principle, name it (cite
+the KB if it maps) so this stays daily work you also learn from.
+
+## Knowledge base
+When a plan choice maps to the knowledge base, cite it inline:
+- `SD=$KB_ROOT/system-design`
+  (e.g. `per system-design/patterns/common-patterns.md`)
+- `LLD=$KB_ROOT/low-level-design`
+  (e.g. `per low-level-design/design-principles.md`)
+Cite only where it maps cleanly; mark anything beyond the notes `[beyond KB]`.
+
 ---
 
 ## Step -1 — Branch awareness
@@ -56,6 +71,24 @@ Use AskUserQuestion to ask:
 Type a number or keyword — or just describe it and I'll classify."
 
 Wait for the answer before proceeding.
+
+---
+
+## Step 0.5 — Design gate
+
+For feat, fix, perf, refactor, or security that touches architecture or
+class structure, decide once whether the design is settled before planning:
+
+- **Needs architecture work** (new topology, service boundary, data
+  model, consistency or scaling decision) → suggest the user run
+  `/sd-design` first, then return to `/blueprint`.
+- **Needs class / object design** (new component, non-trivial ownership
+  or responsibilities) → suggest `/lld-design` first.
+- **Design is obvious or already done** (e.g. `/focus` or a design
+  command already ran) → plan directly.
+
+This is a suggestion to the user, not an automatic handoff. If the
+design is clear, say so and proceed — don't manufacture a detour.
 
 ---
 
@@ -278,6 +311,11 @@ Before showing the plan to the user, internally check:
 - Is any step too large to commit independently?
 - Does any step assume something not confirmed in the codebase?
 - Is there a simpler path to the same outcome?
+- Does any step violate single responsibility or cross the zone's
+  existing architectural / ownership boundaries?
+- Is there a simpler structure or topology that reaches the same outcome?
+- For changes with real design weight: should this have gone through
+  `/sd-design` or `/lld-design` first?
 - For hotfix/security: is the rollback actually executable?
 
 Revise if needed. Then present.
@@ -289,51 +327,9 @@ what to change."
 
 When the user replies 'go': call ExitPlanMode, then begin step 1.
 
-After all steps are complete and "Done when" is confirmed, run the
-push and PR flow below.
+After all steps are complete and "Done when" is confirmed, stop and
+report what changed.
 
----
-
-## Push and PR — always run this after a code plan completes
-
-Run: `git remote get-url origin 2>/dev/null` to get the remote URL.
-Run: `git branch --show-current` to confirm the branch.
-
-Use AskUserQuestion to ask:
-
-"All steps done. Ready to push?
-
-  Branch: [branch]
-  Remote: [remote URL]"
-
-Options: "Yes, push and open a PR" / "Push only" / "Not yet"
-
-**If 'Push only' or 'Yes, push and open a PR':**
-Run: `git push -u origin [branch]`
-
-**If 'Yes, push and open a PR':**
-Create the PR using `gh pr create` with this exact structure:
-
-Title: `type(scope): imperative description`
-(Use the same type and scope as the plan's primary commit. One line, no period.)
-
-Body:
-```
-## What
-[1–2 sentences — what this PR changes at the code level]
-
-## Why
-[The problem being solved — what was broken, missing, slow, or risky,
-and what impact it had. This is the context a reviewer needs to
-understand why the change matters, not just what it does.]
-
-## Result
-[What is true now that wasn't before — the observable outcome.
-If the plan had a "Done when" condition, use it here.]
-```
-
-Rules:
-- No bullet lists unless there are genuinely 3+ parallel items
-- No section should exceed 3 sentences
-- Skip a section only if it adds no information (e.g. a chore with no user impact)
-- Do not repeat the title in the body
+Blueprint plans and implements — it does not commit, push, or open
+PRs. Contribution is a separate, deliberate step. When the work is
+ready to publish, run `/contribute`.

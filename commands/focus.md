@@ -10,6 +10,20 @@ Use read-only tools only (Read, Glob, Grep, LS, LSP, Bash for
 git log and git blame only).
 Do not write code or suggest changes.
 
+## Voice
+Short, technical, plain. No preamble, no hedging, no trailing summary.
+Teach as you go: when you name a pattern or principle, say why it
+matters here so the design sense transfers — this is daily work you
+also learn from.
+
+## Knowledge base
+When a design point maps to the knowledge base, cite the note inline:
+- System design: `SD=$KB_ROOT/system-design`
+  (e.g. `per system-design/patterns/common-patterns.md`)
+- Low-level design: `LLD=$KB_ROOT/low-level-design`
+  (e.g. `per low-level-design/design-principles.md`)
+Cite only where it maps cleanly; mark anything beyond the notes `[beyond KB]`.
+
 Use TodoWrite now to create a checklist of all steps so progress
 is visible throughout the session.
 
@@ -109,6 +123,25 @@ Identify:
 
 ---
 
+## Step 3.5 — Design lens
+
+Read the zone through design vocabulary so the plan that follows has a
+baseline to respect.
+
+- **System-design altitude** — name the pattern this zone implements
+  (request-response with a write-through cache, event-driven consumer,
+  CQRS read model, etc.). Cite the KB where it maps
+  (`per system-design/patterns/common-patterns.md`).
+- **Low-level-design altitude** — name the OO structure: the
+  orchestrator, who owns what state, where single responsibility holds
+  and where it leaks. Cite the principle
+  (`per low-level-design/design-principles.md`).
+
+State the pattern plus the one design decision in this zone most likely
+to constrain a change here. Mark anything beyond the KB `[beyond KB]`.
+
+---
+
 ## Step 4 — Coupling and dependencies
 
 Use LSP find-references to confirm what depends on $ARGUMENTS
@@ -148,6 +181,9 @@ Output the findings in the chat using this structure:
 
 ## Zone map
 [Files and their roles]
+
+## Design lens
+[The SD pattern and LLD structure this zone uses, KB-cited where it maps]
 
 ## Patterns to follow
 [What I must replicate to fit in here]
