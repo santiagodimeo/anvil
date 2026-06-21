@@ -18,7 +18,7 @@ A personal SWE AI framework — Claude Code commands, hooks, and tooling that de
 
 ## Commands
 
-The command workflow is linear by design:
+The ship workflow is linear by design:
 
 ```
 /forge      → design and scaffold a new program from scratch
@@ -28,8 +28,22 @@ The command workflow is linear by design:
 /contribute → commit, branch, and open a PR
 /audit      → codebase health check, no task in mind
 /socratic   → guided dialogue when direction is unclear
-/areweclean → git status sweep across all local repos
 ```
+
+Study & design commands — reason through architecture and class design,
+or learn a concept:
+
+```
+/sd-design  → architecture for a real feature (no code)
+/sd-study   → reason through a system's architecture, or learn an SD concept
+/lld-design → design and scaffold classes for a real component
+/lld-study  → reason through a component's class design, or learn an OO concept
+/dsa-study  → reason through algorithmic code, or learn a pattern
+```
+
+> The study/design commands cite a personal knowledge base via a `$KB_ROOT`
+> placeholder (e.g. `$KB_ROOT/system-design`). Point it at your own notes —
+> set `KB_ROOT` or edit the paths in those command files to match your setup.
 
 ### Install
 
@@ -86,4 +100,4 @@ The workflow mirrors how good engineers actually work:
 1. Understand before touching (`/focus`, `/onboard`)
 2. Plan before coding (`/blueprint`, `/socratic`)
 3. Ship with discipline (`/contribute`)
-4. Review periodically (`/audit`, `/areweclean`)
+4. Review periodically (`/audit`)
