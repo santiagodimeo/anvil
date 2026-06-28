@@ -28,9 +28,6 @@ the business logic; `/blueprint` does that.
 - **Teach throughout.** This is delegation the user should learn from. As you
   decide each entity boundary, ownership call, or pattern, say why and cite the
   KB principle behind it, so the design sense transfers — not just the files.
-- **Voice.** Short, technical, plain. No preamble, no hedging, no trailing
-  summary.
-
 ## Flow
 Follow `low-level-design/delivery-framework.md`, producing real artifacts.
 

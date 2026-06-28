@@ -8,37 +8,11 @@ Call EnterPlanMode now. You may only use read-only tools (Read, Glob,
 Grep, LS, WebSearch) until the user approves the plan and you call
 ExitPlanMode.
 
-## Voice & approach
-Short, technical, plain. No preamble, no hedging, no trailing summary.
-Decisions, not options-dumps — every significant choice names one
-alternative and the one-line reason it lost.
-Teach as you go: when a step embodies a design principle, name it (cite
-the KB if it maps) so this stays daily work you also learn from.
-
-## Knowledge base
-When a plan choice maps to the knowledge base, cite it inline:
-- `SD=$KB_ROOT/system-design`
-  (e.g. `per system-design/patterns/common-patterns.md`)
-- `LLD=$KB_ROOT/low-level-design`
-  (e.g. `per low-level-design/design-principles.md`)
-Cite only where it maps cleanly; mark anything beyond the notes `[beyond KB]`.
-
 ---
 
 ## Step -1 — Branch awareness
 
-Run: `git branch --show-current 2>/dev/null` and note the branch name.
-If not in a git repo, skip this step entirely.
-
-Use AskUserQuestion to ask (customise the message based on the actual branch name):
-
-- **main or master** → "⚠️ You're on `main`. Gitflow convention is to work on feature/, fix/, or hotfix/ branches. Do you want to continue here, or create / switch to a branch first?"
-- **develop** → "You're on `develop`. Are you working directly here, or do you want to spin off a feature branch?"
-- **Any other branch** → "You're on `[branch]`. Any existing in-progress work here I should know about? Is this the right branch for this work?"
-
-Options: "Continue here" / "Create or switch to another branch"
-
-If the user wants to create or switch branches, help them before proceeding.
+<!-- @include references/branch-awareness.md -->
 
 ---
 
@@ -46,29 +20,11 @@ If the user wants to create or switch branches, help them before proceeding.
 
 Use AskUserQuestion to ask:
 
-"What type of task is this?
+"What type of task is this? Type a keyword, or describe it and I'll classify."
 
-  Code changes:
-    feat     — new capability or behaviour
-    fix      — bug that affects existing behaviour
-    hotfix   — critical fix, needs immediate deploy
-    perf     — performance improvement, no behaviour change
-    refactor — internal restructure, no behaviour change
-    security — vulnerability or hardening concern
+The canonical taxonomy:
 
-  Non-code:
-    chore    — tooling, deps, config, CI
-    docs     — documentation only
-    test     — adding or fixing tests only
-    infra    — infrastructure or deployment
-
-  Strategic:
-    research — open investigation, no defined output yet
-    spike    — time-boxed proof of concept with a hypothesis
-    rfc      — proposal requiring team decision
-    postmortem — incident review and prevention
-
-Type a number or keyword — or just describe it and I'll classify."
+<!-- @include references/work-types.md -->
 
 Wait for the answer before proceeding.
 
