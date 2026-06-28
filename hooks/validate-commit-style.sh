@@ -24,14 +24,14 @@ if echo "$command" | grep -q "cat <<'EOF'"; then
   msg=$(printf '%s' "$command" | awk "/cat <<'EOF'/{found=1; next} /^[[:space:]]*EOF/{if(found) exit} found{sub(/^[[:space:]]+/, \"\"); print; exit}")
 fi
 
-# Method 2: -m "message"
+# Method 2: -m "message"  (sed -E is portable; grep -oP lookbehind is GNU-only)
 if [ -z "$msg" ]; then
-  msg=$(echo "$command" | grep -oP '(?<=-m ")[^"]+' | head -1)
+  msg=$(printf '%s' "$command" | sed -nE 's/.*-m "([^"]*)".*/\1/p' | head -1)
 fi
 
 # Method 3: -m 'message'
 if [ -z "$msg" ]; then
-  msg=$(echo "$command" | grep -oP "(?<=-m ')[^']+" | head -1)
+  msg=$(printf '%s' "$command" | sed -nE "s/.*-m '([^']*)'.*/\1/p" | head -1)
 fi
 
 # Can't extract message — don't block on uncertainty

@@ -27,9 +27,6 @@ explain the reasoning so the user learns the design, not just receives it.
   make each significant choice, say why and cite the KB principle behind it
   (e.g. `per system-design/patterns/common-patterns.md`), so the reasoning is
   visible while the work gets done — not buried.
-- **Voice.** Short, technical, plain. No preamble, no hedging, no trailing
-  summary.
-
 ## Flow
 Follow `system-design/delivery-framework.md` as production work — depth over
 pace, no clock. Read the repo first if the feature touches an existing system,
