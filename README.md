@@ -24,6 +24,12 @@ Design — reason about a real feature or component (no code, or skeletons only)
 /lld-design → design and scaffold classes for a real component
 ```
 
+Artifacts — generate something from what already exists:
+
+```
+/erd        → entity-relationship diagram from a live DB → .excalidraw
+```
+
 > Design commands cite a personal knowledge base via a `$KB_ROOT` placeholder
 > (e.g. `$KB_ROOT/system-design`). Point it at your own notes. The learning
 > commands (sd-study, lld-study, dsa-study) have graduated to a separate
