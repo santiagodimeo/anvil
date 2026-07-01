@@ -59,9 +59,9 @@ Roadmap phase N — <acceptance bar, verbatim>.
 - verify: <gate summary>
 - review: <one-line verdict>
 - <key behaviors now working>
-
-🤖 autopilot
 ```
+
+Follow anvil's PR-body standard — What/Why/Result, no emoji, no bot marker.
 
 No remote → skip PR, note it in the ledger.
 
