@@ -8,6 +8,7 @@ Ship workflow — linear by design:
 
 ```
 /forge      → design and scaffold a new program from scratch
+/groundwork → lay the AI-native project layer (charter, roadmap, .claude/) onto a repo
 /onboard    → understand a new codebase from zero
 /focus      → map a zone before changing it
 /blueprint  → plan the implementation
@@ -81,10 +82,16 @@ cp settings/settings.local.json.example ~/.claude/settings.local.json
 ```
 
 `build.sh` is the single entry point: it inlines `references/` and `templates/`
-into the commands and skills, installs those plus `hooks/` into `~/.claude`, and
-syncs the global rules block into `~/.claude/CLAUDE.md`. Re-run it after any
-edit — the installed files are generated, so never hand-edit them; edit the
-sources here.
+into the commands and skills, installs those plus `hooks/` into `~/.claude`,
+copies `scaffold/` to `~/.claude/scaffold/`, and syncs the global rules block into
+`~/.claude/CLAUDE.md`. Re-run it after any edit — the installed files are
+generated, so never hand-edit them; edit the sources here.
+
+`scaffold/` mirrors the per-project layout `/groundwork` materialises into a repo
+(charter, `docs/product/roadmap.md`, project-local `.claude/`, and optional
+autopilot / design / reference / CI). Unlike `templates/` (format snippets inlined
+into commands at build time), these are whole files copied and placeholder-filled
+into the target project at runtime.
 
 To scope anvil to one directory tree (e.g. personal projects only), point
 `CLAUDE_CONFIG_DIR` at a dedicated config dir before running `build.sh` and when

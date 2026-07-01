@@ -1,0 +1,15 @@
+name: CI
+
+on:
+  push:
+    branches: [main, {{BASE_BRANCH}}]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # TODO: set up the project's toolchain (language runtime, deps install) here.
+      # The verify gate — keep in sync with the {{PROJECT_SLUG}}-verify skill.
+      - run: {{VERIFY_CMD}}
