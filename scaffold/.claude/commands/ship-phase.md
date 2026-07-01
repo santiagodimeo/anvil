@@ -5,13 +5,13 @@
 Take **one** `docs/product/roadmap.md` phase from nothing to merged. Phase = `$ARGUMENTS`
 (default: the lowest `todo` phase in `.claude/autopilot/progress.md`).
 
-This mirrors anvil's `/blueprint` + `/contribute` + `/create-pr`, but runs
-**non-interactively** — no approval gates. Make defaults; record them.
+This runs the plan → build → ship loop **non-interactively** — no approval gates. Make
+defaults; record them.
 
 ## 1 · Branch
 
 - From clean `{{BASE_BRANCH}}`, create `feat/p<N>-<slug>` (slug from the phase title).
-- This replaces anvil's interactive branch-guard. Never work on `main`/`{{BASE_BRANCH}}` directly.
+- Never work on `main`/`{{BASE_BRANCH}}` directly.
 
 ## 2 · Plan (inline, no plan-mode)
 
@@ -59,9 +59,10 @@ Roadmap phase N — <acceptance bar, verbatim>.
 - verify: <gate summary>
 - review: <one-line verdict>
 - <key behaviors now working>
-
-🤖 autopilot
 ```
+
+Follow the commit and PR conventions in `CLAUDE.md`: conventional `type(scope)` commit
+subjects, a What/Why/Result PR body, no emoji, no bot marker.
 
 No remote → skip PR, note it in the ledger.
 
