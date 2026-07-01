@@ -20,10 +20,10 @@ merged PRs and a `runlog.md`.
     runlog.md        appended each run (created at runtime)
 ```
 
-It reuses the **anvil** central commands in spirit (`/blueprint`, `/contribute`,
-`/create-pr`, `/audit`) but runs **non-interactively** — anvil's versions gate on human
-approval, which would stall an unsupervised run. The local commands strip those gates and
-keep the same protocols (gitflow branches, conventional commits, What/Why/Result PRs).
+The local `/autopilot` + `/ship-phase` commands run the plan → build → ship loop
+**non-interactively** — no human-approval gates, which would stall an unsupervised run —
+while keeping the standard protocols: gitflow branches, conventional `type(scope)` commits,
+and What/Why/Result PR bodies (all defined in `CLAUDE.md`).
 
 ## One-time setup
 

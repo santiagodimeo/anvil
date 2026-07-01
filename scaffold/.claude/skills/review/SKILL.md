@@ -39,4 +39,4 @@ A short verdict:
 
 Style/formatting, naming bikesheds, test-coverage maximalism, performance micro-tuning,
 or anything not touching correctness/invariants/scope. Keep it light — strictness here
-just stalls the autopilot. `/audit` (anvil) is the deep pass when the human is back.
+just stalls the autopilot. Save the deep, forensic pass for when the human is back.

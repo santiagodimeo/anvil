@@ -19,7 +19,7 @@ Use TodoWrite now to create a checklist of the phases below so progress is visib
 - **No stray tokens.** Every materialized file must have all `{{PLACEHOLDER}}` tokens
   filled. Grep the output for `{{` before finishing — leftover tokens are a bug.
 - **Don't reinstall anvil.** This command scaffolds the *project-local* layer only. It
-  never touches `~/.claude` global tooling.
+  reads from the config dir but never writes to it (no touching the global tooling).
 - **`reference/` is git-ignored** study material — add it to `.gitignore`, never commit its
   contents.
 - **Decisions, not dumps.** When a choice comes up, pick the sensible default, name the
@@ -28,10 +28,23 @@ Use TodoWrite now to create a checklist of the phases below so progress is visib
 
 ## The scaffold source
 
-The template files live at **`~/.claude/scaffold/`** (installed by anvil's `build.sh`; it
-mirrors the target project layout). You read from there, fill placeholders, and write into
-the current project. If `~/.claude/scaffold/` is missing, tell the user to run anvil's
+The template files live in the **`scaffold/` dir of the active Claude config directory**,
+which anvil's `build.sh` installs into. Resolve that path first — it is **not** always
+`~/.claude`:
+
+```
+SCAFFOLD="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/scaffold"
+```
+
+`$CLAUDE_CONFIG_DIR` is anvil's documented way to scope the install to a custom dir, so
+never assume `~/.claude`. Use `$SCAFFOLD` everywhere below. The tree mirrors the target
+project layout; you read from `$SCAFFOLD`, fill placeholders, and write into the current
+project. If `$SCAFFOLD` is missing (`[ -d "$SCAFFOLD" ]`), tell the user to run anvil's
 `build.sh` and stop.
+
+> Note: the location of the anvil *source repo* (where it was cloned) is irrelevant here —
+> `build.sh` already copied the templates into the config dir, so `/groundwork` never needs
+> to know where anvil itself lives.
 
 Placeholders you fill:
 
@@ -58,8 +71,9 @@ Placeholders you fill:
    reasonable default you'll confirm).
 3. Read any existing `CLAUDE.md`, `README.md`, and `docs/` — both to prefill the charter and
    to know exactly which files already exist (so you skip them).
-4. Confirm `~/.claude/scaffold/` exists (`ls ~/.claude/scaffold`). If not, stop and tell the
-   user to run anvil's `build.sh`.
+4. Resolve `$SCAFFOLD` (see "The scaffold source") and confirm it exists
+   (`[ -d "$SCAFFOLD" ] && ls "$SCAFFOLD"`). If not, stop and tell the user to run anvil's
+   `build.sh`.
 
 State what you found: repo/branch, stack, and which core files already exist.
 
@@ -107,7 +121,7 @@ If the user picks the autopilot loop, confirm `{{BASE_BRANCH}}` (default `develo
 1. Build the list of files to create — core + chosen extras — **excluding any that already
    exist** in the project. Show the proposed tree in chat.
 2. Use AskUserQuestion to confirm before writing anything.
-3. For each file: read its template from `~/.claude/scaffold/`, replace every placeholder,
+3. For each file: read its template from `$SCAFFOLD/`, replace every placeholder,
    and Write it to the project. Apply these path rules:
    - `scaffold/CLAUDE.md` → `./CLAUDE.md`
    - `scaffold/docs/product/roadmap.md` → `./docs/product/roadmap.md`

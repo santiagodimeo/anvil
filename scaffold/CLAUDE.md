@@ -22,5 +22,7 @@ _TODO — list run / build / test commands (e.g. `{{VERIFY_CMD}}`)._
 
 ## Conventions
 
-- Gitflow branches (`type/short-description`); conventional commits (`type(scope): subject`).
+- Gitflow branches (`type/short-description`); conventional commits (`type(scope): subject`,
+  imperative, lowercase, no trailing period, no emoji).
+- PR bodies follow **What / Why / Result** — no emoji, no bot/tool markers.
 - Decisions, not options-dumps — name the alternative and the one-line reason it lost.
