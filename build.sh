@@ -57,6 +57,14 @@ done
 cp "$ANVIL_DIR"/hooks/*.sh "$CLAUDE_DIR/hooks/"
 chmod +x "$CLAUDE_DIR"/hooks/*.sh
 
+# Project scaffold → ~/.claude/scaffold/ (mirrors the target project layout;
+# materialised into a repo at runtime by the /groundwork command).
+if [ -d "$ANVIL_DIR/scaffold" ]; then
+  rm -rf "$CLAUDE_DIR/scaffold"
+  mkdir -p "$CLAUDE_DIR/scaffold"
+  cp -R "$ANVIL_DIR"/scaffold/. "$CLAUDE_DIR/scaffold/"
+fi
+
 # Global rules → the anvil-managed block of ~/.claude/CLAUDE.md
 TARGET="$CLAUDE_DIR/CLAUDE.md"
 BEGIN="<!-- anvil:begin (managed — edit anvil/CLAUDE.global.md) -->"
@@ -81,4 +89,5 @@ echo "anvil installed into $CLAUDE_DIR"
 echo "  commands: $(ls "$ANVIL_DIR"/commands/*.md | wc -l | tr -d ' ')"
 echo "  skills:   $(ls -d "$ANVIL_DIR"/skills/*/ 2>/dev/null | wc -l | tr -d ' ')"
 echo "  hooks:    $(ls "$ANVIL_DIR"/hooks/*.sh | wc -l | tr -d ' ')"
+echo "  scaffold: $(find "$ANVIL_DIR"/scaffold -type f 2>/dev/null | wc -l | tr -d ' ') files (→ /groundwork)"
 echo "Note: settings.json is not touched — copy settings/settings.json.example and fill in credentials."

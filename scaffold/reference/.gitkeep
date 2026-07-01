@@ -1,0 +1,6 @@
+# reference/ — prior art & study material (git-ignored)
+#
+# Shallow-clone the codebases worth learning from or porting behavior out of, one dir each.
+# This tree is READ-ONLY study material: never edited by autopilot, never committed
+# (the `/groundwork` command adds `reference/` to .gitignore). Rewrite anything you take
+# from here behind your own seam — don't copy source in, and mind each source's license.
