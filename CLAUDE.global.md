@@ -37,9 +37,17 @@ learn from.
 
 When a choice maps to the knowledge base, cite the note inline:
 
-- System design: `SD=$KB_ROOT/system-design`
+- System design: `SD=$KB_ROOT/system-design` — topology, storage, protocol
   (e.g. `per system-design/patterns/common-patterns.md`)
-- Low-level design: `LLD=$KB_ROOT/low-level-design`
+- Low-level design: `LLD=$KB_ROOT/low-level-design` — classes, ownership
   (e.g. `per low-level-design/design-principles.md`)
+- Engineering: `ENG=$KB_ROOT/engineering` — changing a system that already
+  exists: `microservices/`, `evolution/`, `messaging/`, `stability/`,
+  `testing/`, `security/`
+  (e.g. `per engineering/messaging/idempotent-receiver.md`)
+
+`$KB_ROOT/SOURCES.md` is the bibliography — reach past the notes to a canonical
+source when the summary isn't enough.
 
 Cite only where it maps cleanly; mark anything beyond the notes `[beyond KB]`.
+If `$KB_ROOT` is unset, skip citation silently — never invent a note path.

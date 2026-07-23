@@ -11,12 +11,23 @@ Ship workflow — linear by design:
 /groundwork → lay the AI-native project layer (charter, roadmap, .claude/) onto a repo
 /onboard    → understand a new codebase from zero
 /focus      → map a zone before changing it
+/survey     → map a zone against the repo's own standards
 /blueprint  → plan the implementation
+/draft      → plan it against the repo's own standards
 /contribute → commit, branch, and open a PR
 /release    → changelog from commits grouped by type
 /audit      → codebase health check, no task in mind
 /socratic   → guided dialogue when direction is unclear
 ```
+
+> `/survey` and `/draft` are the project-aware pair. They read whatever the repo
+> declares — `.claude/project.json`, `.claude/skills/`, `CLAUDE.md` — derive the
+> base branch, work type, verify command and ship path from it, print those as
+> stated assumptions, and ask only the questions a repo can't answer. Where a
+> tracker is configured they take a ticket key directly (`/survey EUP-304`), and
+> they hand off to the repo's own pipeline rather than always to `/contribute`.
+> In a repo that declares nothing they fall back to `/focus` and `/blueprint`
+> behaviour, which remain the generic pair.
 
 Design — reason about a real feature or component (no code, or skeletons only):
 
