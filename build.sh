@@ -33,10 +33,18 @@ expand_includes() {
 
 mkdir -p "$CLAUDE_DIR/commands" "$CLAUDE_DIR/skills" "$CLAUDE_DIR/hooks"
 
+# What this build installs, one relative path per line. Compared against the
+# previous build's manifest at the end so renamed or deleted sources are pruned
+# from ~/.claude instead of lingering forever. Only anvil's own entries are ever
+# touched — skills installed by anything else are invisible to this.
+MANIFEST="$CLAUDE_DIR/.anvil-manifest"
+installed="$(mktemp)"
+
 # Commands → ~/.claude/commands/ (includes expanded)
 for f in "$ANVIL_DIR"/commands/*.md; do
   [ -e "$f" ] || continue
   expand_includes "$f" > "$CLAUDE_DIR/commands/$(basename "$f")"
+  echo "commands/$(basename "$f")" >> "$installed"
 done
 
 # Skills → ~/.claude/skills/<name>/ (SKILL.md expanded, bundled assets copied)
@@ -51,21 +59,35 @@ for d in "$ANVIL_DIR"/skills/*/; do
       *) [ -e "$asset" ] && cp -R "$asset" "$CLAUDE_DIR/skills/$name/" ;;
     esac
   done
+  echo "skills/$name" >> "$installed"
 done
 
 # Hooks → ~/.claude/hooks/ (executable)
-cp "$ANVIL_DIR"/hooks/*.sh "$CLAUDE_DIR/hooks/"
-chmod +x "$CLAUDE_DIR"/hooks/*.sh
+for f in "$ANVIL_DIR"/hooks/*.sh; do
+  [ -e "$f" ] || continue
+  cp "$f" "$CLAUDE_DIR/hooks/"
+  chmod +x "$CLAUDE_DIR/hooks/$(basename "$f")"
+  echo "hooks/$(basename "$f")" >> "$installed"
+done
 
-# Project scaffold → ~/.claude/scaffold/ (mirrors the target project layout;
-# materialised into a repo at runtime by the /groundwork command).
-if [ -d "$ANVIL_DIR/scaffold" ]; then
-  rm -rf "$CLAUDE_DIR/scaffold"
-  mkdir -p "$CLAUDE_DIR/scaffold"
-  cp -R "$ANVIL_DIR"/scaffold/. "$CLAUDE_DIR/scaffold/"
+# Prune what a previous build installed and this one no longer produces.
+if [ -f "$MANIFEST" ]; then
+  while IFS= read -r entry; do
+    # Reject anything that isn't a plain relative path under a known subdir.
+    case "$entry" in
+      commands/*|skills/*|hooks/*) ;;
+      *) continue ;;
+    esac
+    case "$entry" in *..*) continue ;; esac
+    grep -Fxq "$entry" "$installed" && continue
+    rm -rf "${CLAUDE_DIR:?}/$entry"
+    echo "  pruned: $entry"
+  done < "$MANIFEST"
 fi
+sort "$installed" > "$MANIFEST"
+rm -f "$installed"
 
-# Global rules → the anvil-managed block of ~/.claude/CLAUDE.md
+# Global rules → the anvil-managed block of ~/.claude/CLAUDE.md (includes expanded)
 TARGET="$CLAUDE_DIR/CLAUDE.md"
 BEGIN="<!-- anvil:begin (managed — edit anvil/CLAUDE.global.md) -->"
 END="<!-- anvil:end -->"
@@ -78,9 +100,13 @@ awk -v b="$BEGIN" -v e="$END" '
   !skip {print}
 ' "$TARGET" > "$tmp"
 {
-  cat "$tmp"
+  # Trailing blank lines are trimmed so repeated builds don't accumulate them.
+  awk '{ l[NR] = $0 }
+       END { last = NR
+             while (last > 0 && l[last] ~ /^[[:space:]]*$/) last--
+             for (i = 1; i <= last; i++) print l[i] }' "$tmp"
   printf '\n%s\n' "$BEGIN"
-  cat "$ANVIL_DIR/CLAUDE.global.md"
+  expand_includes "$ANVIL_DIR/CLAUDE.global.md"
   printf '%s\n' "$END"
 } > "$TARGET"
 rm -f "$tmp"
@@ -89,5 +115,4 @@ echo "anvil installed into $CLAUDE_DIR"
 echo "  commands: $(ls "$ANVIL_DIR"/commands/*.md | wc -l | tr -d ' ')"
 echo "  skills:   $(ls -d "$ANVIL_DIR"/skills/*/ 2>/dev/null | wc -l | tr -d ' ')"
 echo "  hooks:    $(ls "$ANVIL_DIR"/hooks/*.sh | wc -l | tr -d ' ')"
-echo "  scaffold: $(find "$ANVIL_DIR"/scaffold -type f 2>/dev/null | wc -l | tr -d ' ') files (→ /groundwork)"
 echo "Note: settings.json is not touched — copy settings/settings.json.example and fill in credentials."
