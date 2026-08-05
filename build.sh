@@ -39,6 +39,8 @@ mkdir -p "$CLAUDE_DIR/commands" "$CLAUDE_DIR/skills" "$CLAUDE_DIR/hooks"
 # touched — skills installed by anything else are invisible to this.
 MANIFEST="$CLAUDE_DIR/.anvil-manifest"
 installed="$(mktemp)"
+had_manifest=yes
+[ -f "$MANIFEST" ] || had_manifest=no
 
 # Commands → ~/.claude/commands/ (includes expanded)
 for f in "$ANVIL_DIR"/commands/*.md; do
@@ -87,6 +89,22 @@ if [ -f "$MANIFEST" ]; then
     echo "  pruned: $entry"
   done < "$MANIFEST"
 fi
+# One-time v1 → v2 migration. v1 never wrote a manifest, so the first v2 build
+# has no baseline to diff against and would leave v1's commands and its scaffold
+# directory sitting in the config dir forever. Runs only when no manifest exists.
+if [ "$had_manifest" = no ]; then
+  for legacy in audit contribute draft erd focus forge groundwork lld-design \
+                onboard release sd-design socratic survey; do
+    [ -e "$CLAUDE_DIR/commands/$legacy.md" ] || continue
+    rm -f "$CLAUDE_DIR/commands/$legacy.md"
+    echo "  pruned (v1): commands/$legacy.md"
+  done
+  if [ -d "$CLAUDE_DIR/scaffold" ]; then
+    rm -rf "${CLAUDE_DIR:?}/scaffold"
+    echo "  pruned (v1): scaffold/"
+  fi
+fi
+
 sort "$installed" > "$MANIFEST"
 rm -f "$installed"
 
