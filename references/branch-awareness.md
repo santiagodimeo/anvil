@@ -1,19 +1,23 @@
-# Branch awareness
+## Branch awareness
 
-Run `git branch --show-current 2>/dev/null` and note the branch. If this is not
-a git repo, skip this entirely.
+Run `git branch --show-current`. Not a git repo? Skip this entirely.
 
-Use AskUserQuestion (customise the message to the actual branch name):
+**On `main`, `master`, or `develop`** — create the branch and say one line.
+Don't ask. The name comes from the derived work type plus a slug of the task,
+per the gitflow conventions.
 
-- **main / master** → "⚠️ You're on `[branch]`. Gitflow convention is to work on
-  feature/, fix/, or hotfix/ branches. Continue here, or create / switch to a
-  branch first?"
-- **develop** → "You're on `develop`. Working directly here, or spin off a
-  feature branch?"
-- **any other branch** → "You're on `[branch]`. Any in-progress work here I
-  should know about? Is this the right branch for this work?"
+```
+Branched to feature/oauth-login off develop.
+```
 
-Options: "Continue here" / "Create or switch to another branch"
+**On any other branch** — it's already a working branch. Say nothing, continue.
 
-If the user wants to create or switch branches, help them before proceeding
-(name per the gitflow conventions).
+### When to actually ask
+
+Only when acting would be wrong, not merely uncertain:
+
+- The branch has uncommitted work unrelated to this task.
+- The work type maps to two plausible bases — a `fix` that might be a `hotfix`
+  targeting `main` rather than `develop`.
+
+One question, then proceed.
