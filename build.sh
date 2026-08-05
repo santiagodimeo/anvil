@@ -73,12 +73,15 @@ done
 # Prune what a previous build installed and this one no longer produces.
 if [ -f "$MANIFEST" ]; then
   while IFS= read -r entry; do
-    # Reject anything that isn't a plain relative path under a known subdir.
-    case "$entry" in
-      commands/*|skills/*|hooks/*) ;;
-      *) continue ;;
-    esac
-    case "$entry" in *..*) continue ;; esac
+    # Must be exactly <known-dir>/<one-component>. A bare "skills/" would
+    # otherwise match "skills/*" — shell globs match the empty string — and
+    # take out every skill in the config dir, including ones anvil never
+    # installed.
+    case "$entry" in */*) ;; *) continue ;; esac
+    dir="${entry%%/*}"
+    leaf="${entry#*/}"
+    case "$dir" in commands|skills|hooks) ;; *) continue ;; esac
+    case "$leaf" in ""|.|..|*/*|*..*) continue ;; esac
     grep -Fxq "$entry" "$installed" && continue
     rm -rf "${CLAUDE_DIR:?}/$entry"
     echo "  pruned: $entry"
