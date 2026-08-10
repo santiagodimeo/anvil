@@ -85,6 +85,10 @@ Close with one line pointing forward: `/map` when the repo needs understanding,
   registry; new posts are added here by hand` is orientation. `src/posts.ts` on
   its own is a bare tree, and a bare tree is the thing this command exists to
   avoid printing.
+- **Layout and Config are sentences, not columns.** Padding names into an
+  aligned two-column list turns the section back into the tree it's supposed to
+  replace — the alignment starts carrying the meaning instead of the words.
+  `path — what it's for.` One per line, and stop.
 - **No line numbers.** Directory and file names are the answer here because
   they were asked for. Line-level detail was not, and belongs in `.map/`.
 - **Say what you couldn't determine.** "No CI config — nothing here says how
