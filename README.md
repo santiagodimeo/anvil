@@ -1,6 +1,6 @@
 # anvil
 
-How I work with Claude Code. Four commands, three human gates, and a hard rule
+How I work with Claude Code. Five commands, three human gates, and a hard rule
 about what belongs in a conversation versus what belongs in a file.
 
 The premise: automate the mechanical, keep the human on the engineering
@@ -11,13 +11,16 @@ it ships.
 ## The loop
 
 ```
+/stock      what am I working with? Read-only, no cache.
 /map        understand any repo. Read-only, cached in .map/.
 /spec       rough idea → spec.md, conversationally.        ← I approve
 /blueprint  plan mode → plan → approve → it runs.          ← I approve
 /ship       branch → commits → PR → CI → review gauntlet.  ← I merge
 ```
 
-`/spec` is optional — small, obvious work goes straight to `/blueprint`.
+`/stock` and `/spec` are both optional. A repo I already know doesn't need
+`/stock`; small, obvious work goes straight to `/blueprint`.
+
 `/blueprint` is one command, not two: native plan mode already gates
 approve-then-execute, so a separate build step would be a second gate with no
 new judgment in it.
@@ -38,6 +41,31 @@ File-and-line detail is real and useful, so it goes where it's useful: in the
 plan, in the PR body, in a `.map/` page. Not in the terminal, unless I asked.
 Findings that aren't what I asked about go to a findings file and surface once,
 at ship time.
+
+## `/stock`
+
+The first sixty seconds in an unfamiliar repo, when the question is still what
+this is and whether I care. Five sections, one screen, nothing written:
+
+```
+What this is    the kind of system, in a sentence
+Stack           languages, frameworks, runtime, and what pins each claim
+Layout          the directories that matter, one line of purpose each
+Config          what decides how this builds, runs, and deploys
+Shape           how it's organized, and the convention a newcomer trips on
+```
+
+Bar stock — the material identified before it's heated. It answers *what is
+it*; `/map` answers *how does it work* and pays for that with a cache. Run
+`/stock` first, `/map` if the answer makes the repo worth it.
+
+Directory and file names appear here, which the altitude rule normally
+forbids — but only for detail nobody asked for, and typing `/stock` is the ask.
+The discipline is that every entry earns its line with a purpose. A bare tree is
+the thing the command exists to avoid printing.
+
+Adapted from the codebase-exploration prompt in educative's *Claude Code:
+Workflows and Tools*. More of the course lands here as I work through it.
 
 ## `/map`
 
