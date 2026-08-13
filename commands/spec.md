@@ -9,7 +9,21 @@ only — no implementation, no file names, no architecture. That's `/blueprint`.
 
 ---
 
-## Step 0 — Is this worth a spec?
+## Step 0 — New spec, or refining one that exists?
+
+Resolve `<slug>` from `$ARGUMENTS` first — the ticket key when it looks like one,
+otherwise a short kebab-case name for the work. If `.map/work/<slug>/spec.md`
+already exists, this is a refinement:
+
+- Skip the worth-a-spec test below. That was settled when the file was written.
+- Read the file. It's the current state of the work, and it outranks anything
+  said in an earlier session.
+- Ask only about what they named in `$ARGUMENTS` and what's still under
+  `## Open`. A section they've already written is an answer, not a prompt.
+- Go to Step 3 and rewrite the file in place. Refining isn't regenerating — a
+  section you learned nothing new about comes back in their words, unchanged.
+
+If nothing exists at that slug, it's a new spec. Is it worth one?
 
 If the work is one obvious change with a clear outcome, say so in one line and
 point at `/blueprint`. Don't manufacture a spec for a two-line fix.
@@ -48,8 +62,7 @@ delivers most of the value is the most useful thing you can do here.
 
 ## Step 3 — Write it
 
-Write `.map/work/<slug>/spec.md`, where `<slug>` is the ticket key when there is
-one, otherwise a short kebab-case name for the work.
+Write `.map/work/<slug>/spec.md`, using the `<slug>` resolved in Step 0.
 
 ```markdown
 # <title>
