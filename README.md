@@ -1,7 +1,8 @@
 # anvil
 
-How I work with Claude Code. Five commands, three human gates, and a hard rule
-about what belongs in a conversation versus what belongs in a file.
+How I work with Claude Code. Five commands, three human gates, one maintenance
+sweep, and a hard rule about what belongs in a conversation versus what belongs
+in a file.
 
 The premise: automate the mechanical, keep the human on the engineering
 judgment. Claude branches, commits, opens PRs, runs CI, reviews code, and hunts
@@ -28,6 +29,12 @@ new judgment in it.
 `/ship` doesn't reimplement review. It runs the native `/code-review` and
 `/security-review` alongside a dependency audit and lint, and reports blockers
 only.
+
+Outside the loop, across all of them:
+
+```
+/sweep      update and clean every repo in a scope.       ← I approve
+```
 
 ## Altitude
 
@@ -88,6 +95,46 @@ moved since it was built.
 
 `.map/` is ignored through git's global excludes (`~/.config/git/ignore`), never
 the repo's own `.gitignore`. Nothing to explain to a teammate.
+
+## `/sweep`
+
+The only command that works across repos instead of inside one. Maintenance,
+not delivery — it sits outside the loop because nothing it does moves a change
+toward shipping:
+
+```
+branches    fetch --prune everywhere, fast-forward what's behind
+worktrees   flag the ones left over from work that already finished
+draft PRs   suggest the ones nobody is going to finish, with the reason
+docker      containers holding memory for a repo I stopped working on
+```
+
+One question, ever: **where**. The options are computed at run time from
+`~/.claude.json`'s project list plus a bounded disk scan, grouped by parent
+folder — no directory name is hardcoded anywhere in the command. An argument
+skips the question entirely.
+
+Everything else is derived, reported, and gated. Actions land in three tiers,
+split on one line — **git-local and reversible is safe; destroys data or costs a
+rebuild is an ask:**
+
+| Tier | What's in it | Gate |
+|------|--------------|------|
+| Safe | fast-forwards, `[gone]`-and-merged branch deletes, `worktree prune` | one approval for the batch |
+| Ask | stale worktrees, draft PRs, stashes, all of Docker | numbered, I pick |
+| Never | anything with uncommitted or unpushed work | reported only |
+
+That puts every Docker prune in the ask tier. Reclaiming a build cache is free
+disk and several minutes of rebuild, and that trade doesn't belong batched into
+an approval about branch refs.
+
+The report's **Left alone** section is the point of the whole thing. A sweep
+that only shows what it wants to delete is asking to be trusted about
+everything it didn't mention.
+
+The one unasked mutation is `git fetch --all --prune --tags`, which can't touch
+a working tree or a commit. It never pushes, rebases, resets, or force-anythings
+— and a non-interactive session reports and stops without applying anything.
 
 ## Skills
 
