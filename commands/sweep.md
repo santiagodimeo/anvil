@@ -71,10 +71,17 @@ what it resolved to, and go to Step 1.
 
 Two sources, merged and de-duplicated:
 
-1. **`~/.claude.json`** (or `$CLAUDE_CONFIG_DIR/.claude.json` when that's set).
-   Its `projects` object is keyed by absolute path, one key per directory
-   Claude Code has been run in. This is the strong signal — these are places
-   where work actually happens, not places that merely contain a `.git`.
+1. **Every `.claude.json` on the machine**, not just the active one. Its
+   `projects` object is keyed by absolute path, one key per directory Claude
+   Code has been run in. This is the strong signal — these are places where
+   work actually happens, not places that merely contain a `.git`.
+
+   Read `$HOME/.claude.json`, `$CLAUDE_CONFIG_DIR/.claude.json`, and any
+   sibling config dir (`~/.claude-*`), then merge the key sets. A machine with
+   more than one account has more than one of these, and each holds only that
+   account's history — reading whichever one happens to be active hides the
+   other account's repos, which is exactly the kind of silent gap that makes a
+   sweep untrustworthy.
 2. **A bounded filesystem scan** for `.git` directories: the parents that the
    above paths share, plus `$HOME` at depth 4. Exclude `node_modules`,
    `vendor`, `Library`, `.Trash`, `.cache`, and anything inside a `.git`.
