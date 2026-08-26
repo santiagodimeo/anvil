@@ -1,8 +1,4 @@
 {
-  "env": {
-    "SLACK_BOT_TOKEN": "YOUR_SLACK_BOT_TOKEN",
-    "SLACK_TEAM_ID": "YOUR_SLACK_TEAM_ID"
-  },
   "attribution": {
     "commit": "",
     "pr": ""
@@ -39,5 +35,6 @@
     }
   },
   "skipDangerousModePermissionPrompt": true,
-  "theme": "dark"
+  "theme": "dark-ansi",
+  "outputStyle": "Direction"
 }
