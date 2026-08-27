@@ -187,6 +187,12 @@ Wire them into `~/.claude/settings.json`:
 anvil is the personal-workspace framework. It installs into `~/.claude` and
 nowhere else.
 
+Four commands are borrowed by the work config dir, because that pipeline has no
+equivalent: `/map` and `/stock` (repo understanding), `/sweep` (cross-repo
+maintenance), and `/tldr` (which was never an anvil command anyway). They are
+symlinked **per file**, not per directory — so they track a rebuild here without
+dragging `/blueprint` and `/ship` across the boundary. Nothing else crosses.
+
 Work at Juxtapose runs on a different pipeline (`jxp-skills`, installed per-repo)
 under a separate config dir at `~/.claude-juxtapose`. Those two frameworks
 disagree about who gates a merge — anvil gates on `/ship`'s review gauntlet,
