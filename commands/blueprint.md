@@ -56,8 +56,6 @@ them the chance to correct your read before you build on it.
 
 ## Step 4 — Think it through
 
-<!-- @include references/kb-map.md -->
-
 For anything touching topology, data model, or class structure, do the design
 thinking here — not in a separate command, and not out loud. What lands in the
 plan file is the decision and the alternative that lost. What lands in chat is
@@ -79,7 +77,7 @@ the spec.
 # <type>(<scope>): <title>
 
 [One paragraph: the approach, and the alternative that lost with the one-line
-reason. KB-cited where it maps — `per engineering/...`. This is the only prose
+reason. This is the only prose
 in the file.]
 
 ## Steps

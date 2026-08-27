@@ -1,8 +1,8 @@
 # anvil
 
-How I work with Claude Code. Five commands, three human gates, one maintenance
-sweep, and a hard rule about what belongs in a conversation versus what belongs
-in a file.
+How I work with Claude Code in my personal workspace. Five commands, three human
+gates, one maintenance sweep, one personal utility, and a hard rule about what
+belongs in a conversation versus what belongs in a file.
 
 The premise: automate the mechanical, keep the human on the engineering
 judgment. Claude branches, commits, opens PRs, runs CI, reviews code, and hunts
@@ -34,12 +34,20 @@ Outside the loop, across all of them:
 
 ```
 /sweep      update and clean every repo in a scope.       ← I approve
+/tldr       cut something long down to what I must act on.
 ```
+
+`/tldr` is not an anvil command — it's a personal utility that lives directly in
+each config dir and is deliberately absent from `.anvil-manifest`, so rebuilds
+never touch it. Adding a `commands/tldr.md` to this repo would overwrite the
+hand-written copy on the next build.
 
 ## Altitude
 
-The rule the rest of it is built around, in `references/altitude.md` and applied
-to every session:
+The rule the rest of it is built around. It lives in two places now: the
+`Direction` output style, which applies it to every response in every account,
+and `references/altitude.md`, which is inlined into all six commands so it
+survives an output-style switch.
 
 > Report at the level the reader works at — architecture, system design, data
 > model. Not files, not lines.
@@ -174,18 +182,25 @@ Wire them into `~/.claude/settings.json`:
 }
 ```
 
-## Working in any repo
+## Scope — personal work only
 
-Every command reads what the repo already declares — `.claude/project.json`,
-`.claude/skills/`, `CLAUDE.md`, CI config, package scripts — and defers to it. A
-work repo with its own pipeline gets its own pipeline. A fresh personal project
-gets sane defaults, with the assumption stated in one line so it's correctable.
-anvil fills gaps; it doesn't override.
+anvil is the personal-workspace framework. It installs into `~/.claude` and
+nowhere else.
+
+Work at Juxtapose runs on a different pipeline (`jxp-skills`, installed per-repo)
+under a separate config dir at `~/.claude-juxtapose`. Those two frameworks
+disagree about who gates a merge — anvil gates on `/ship`'s review gauntlet,
+jxp-skills gates on an `/audit-pr` receipt that fails closed — so they don't
+share a commands directory and shouldn't.
+
+Do not run `build.sh` against the work config dir. Within personal repos, every
+command still reads what the repo declares — `.claude/project.json`, `CLAUDE.md`,
+CI config, package scripts — and defers to it rather than overriding.
 
 ## Install
 
 ```bash
-./build.sh
+CLAUDE_CONFIG_DIR=~/.claude ./build.sh
 cp settings/settings.json.example ~/.claude/settings.json     # then fill in credentials
 cp settings/settings.local.json.example ~/.claude/settings.local.json
 ```
@@ -195,8 +210,11 @@ installs those plus `hooks/` into `~/.claude`, and syncs the global rules into
 the managed block of `~/.claude/CLAUDE.md`. Re-run after any edit — installed
 files are generated, so edit the sources here, never `~/.claude`.
 
-To scope anvil to one directory tree, point `CLAUDE_CONFIG_DIR` at a dedicated
-config dir before running `build.sh` and when launching Claude Code there.
+**Set `CLAUDE_CONFIG_DIR` explicitly.** `build.sh` targets
+`${CLAUDE_CONFIG_DIR:-$HOME/.claude}`, so running it bare from a shell where that
+variable points at the work config dir installs anvil into work. Worse, a first
+build against a config dir with no `.anvil-manifest` fires the one-time v1→v2
+migration, which deletes `$CLAUDE_CONFIG_DIR/scaffold/`.
 
 `settings/*.example` are sanitized — never commit the filled-in versions.
 
